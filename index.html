@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Colors-changer</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"
+      integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/chroma-js/2.4.2/chroma.min.js"
+      integrity="sha512-zInFF17qBFVvvvFpIfeBzo7Tj7+rQxLeTJDmbxjBz5/zIr89YVbTNelNhdTT+/DCrxoVzBeUPVFJsczKbB7sew=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+    <style>
+      * {
+        padding: 0;
+        margin: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        height: 100vh;
+        font-family: "Roboto", sans-serif;
+      }
+
+      ul {
+        list-style: none;
+      }
+
+      .list {
+        display: flex;
+        height: 100%;
+      }
+
+      .col {
+        flex: 1;
+        background: #ccc;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        align-items: center;
+      }
+
+      .col > h2 {
+        padding: 10px;
+        cursor: pointer;
+        border-radius: 10px;
+        transition: background 300ms;
+      }
+
+      .col > h2:hover {
+        background: rgba(0, 0, 0, 0.1);
+      }
+
+      .col button {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        outline: none;
+        background: transparent;
+        padding: 10px;
+        border-radius: 50%;
+        border-width: 0;
+        cursor: pointer;
+        transition: background 300ms;
+        font-size: 1.5rem;
+        width: 60px;
+        height: 60px;
+        color: inherit;
+      }
+
+      .col button:hover {
+        background: rgba(0, 0, 0, 0.1);
+      }
+
+      .tips {
+        /* width: 70vw;
+        height: 70vh; */
+        position: absolute;
+        /* top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%); */
+        top: 30px;
+        right: 150px;
+        border-width: 5px;
+        border-radius: 30px 90px;
+        border-style: solid;
+        border-color: rgba(0, 0, 0, 0.7);
+        color: rgba(0, 0, 0, 0.7);
+        background-color: rgba(200, 200, 200, 0.9);
+        transition: all 1s;
+      }
+
+      .visually-hidden {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        margin: -1px;
+        padding: 0;
+        overflow: hidden;
+        border: 0;
+        clip: rect(0 0 0 0);
+      }
+
+      .tips_text {
+        padding: 30px 20px 20px 20px;
+      }
+
+      .tips_text *:not(:last-child) {
+        margin-bottom: 10px;
+      }
+
+      .tips_text > p {
+        font-size: 24px;
+        line-height: 1.5;
+      }
+
+      .tips_text > h2 {
+        text-align: center;
+        font-size: 36px;
+        line-height: 1.5;
+      }
+
+      .tips_text > button {
+        font-size: 1.5rem;
+        border-radius: 10px 20px;
+        padding: 20px 30px;
+        margin-top: 50px;
+        margin-right: auto;
+        margin-left: auto;
+        display: block;
+        background-color: rgba(150, 150, 150, 1);
+        cursor: pointer;
+      }
+
+      .q {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        border-width: 5px;
+        border-radius: 50%;
+        border-style: solid;
+        border-color: rgba(0, 0, 0, 0.7);
+        color: rgba(0, 0, 0, 0.7);
+        background-color: transparent;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 15px;
+        transition: all 1s;
+        z-index: 1;
+      }
+
+      .q > button {
+        outline: none;
+        border: none;
+        background: transparent;
+        cursor: pointer;
+      }
+
+      .question {
+        width: 30px;
+        height: 30px;
+        fill: currentColor;
+        stroke: currentColor;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="tips" class="tips">
+      <div class="tips_text">
+        <h2>Как это работает?</h2>
+        <p>Пробел - сменить цвета</p>
+        <p>
+          Кликните по замку: закрытый - фиксирует цвет, открытый - открывает
+        </p>
+        <p>Кликните по тексту, чтобы скопировать цвет в буфер обмена</p>
+        <p>Скопируйте ссылку, чтобы сохранить выбранную палитру</p>
+        <button data-action="close" class="ok-btn" type="button">
+          Понятно!
+        </button>
+      </div>
+      <button data-action="open" class="tips_question-button visually-hidden">
+        <svg class="question">
+          <use href="icons.svg#icon-question"></use>
+        </svg>
+      </button>
+    </div>
+    <ul class="list">
+      <li class="col">
+        <h2 data-action="text">Text</h2>
+        <button data-action="lock">
+          <!-- <i class="fa-solid fa-lock"></i> -->
+          <i class="fa-solid fa-lock-open" data-action="lock"></i>
+        </button>
+      </li>
+      <li class="col">
+        <h2 data-action="text">Text</h2>
+        <button data-action="lock">
+          <i class="fa-solid fa-lock-open" data-action="lock"></i>
+        </button>
+      </li>
+      <li class="col">
+        <h2 data-action="text">Text</h2>
+        <button data-action="lock">
+          <i class="fa-solid fa-lock-open" data-action="lock"></i>
+        </button>
+      </li>
+      <li class="col">
+        <h2 data-action="text">Text</h2>
+        <button data-action="lock">
+          <i class="fa-solid fa-lock-open" data-action="lock"></i>
+        </button>
+      </li>
+      <li class="col">
+        <h2 data-action="text">Text</h2>
+        <button data-action="lock">
+          <i class="fa-solid fa-lock-open" data-action="lock"></i>
+        </button>
+      </li>
+    </ul>
+    <script src="./ap.js" type="module"></script>
+  </body>
+</html>
